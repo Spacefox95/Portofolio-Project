@@ -2,60 +2,76 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function AddEmployee() {
-	const [name, setName] = useState('');
+	const [firstname, setFirstName] = useState('');
+	const [lastname, setLastName] = useState('');
 	const [role, setRole] = useState('');
 	const [email, setEmail] = useState('');
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		if (!name || !role || !email) {
-			console.error('Tous les champs doivent être remplis');
-			return;
-		}
-		axios.post('http://127.0.0.1:5000/employees', {
-			name: name,
-			role: role,
-			email: email
-		})
-		.then(response => {
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		const token = localStorage.getItem('token');
+		try {
+			await axios.post('http://localhost:5000/employees', {
+				firstname, lastname, role, email
+			}, {
+				headers: {Authorization: `Bearer ${token}` }
+			});
 			console.log('Employé ajouté:', response.data);
-			setName('');
+			setFirstName('');
+			setLastName('');
 			setRole('');
 			setEmail('');
-		})
-		.catch(error => {
+		} catch(error) {
 			console.error('Il y a eu une erreur lors de l ajout d un employé!', error);
-		});
+		}
 	};
+
 	return (
-		<div>
-			<h1>Ajout Employé</h1>
-			<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit}>
+			<h1>Ajouter un employé</h1>
+			<div>
+				<label>Prénom</label>
 				<input
 				type='text'
-				value={name}
-				onChange={e => setName(e.target.value)}
-				placeholder='Name'
+				value={firstname}
+				onChange={e => setFirstName(e.target.value)}
+				placeholder='Prénom'
 				required
 				/>
+				</div>
+				<div>
+					<label>Nom</label>
+				<input
+				type='text'
+				value={lastname}
+				onChange={e => setLastName(e.target.value)}
+				placeholder='Nom'
+				required
+				/>
+				</div>
+				<div>
+					<label>Rôle</label>
 				<input
 				type='text'
 				value={role}
 				onChange={e => setRole(e.target.value)}
-				placeholder='Role'
+				placeholder='Rôle'
 				required
 				/>
+				</div>
+				<div>
+					<label>Email</label>
 				<input
 				type='text'
 				value={email}
 				onChange={e => setEmail(e.target.value)}
-				placeholder="Email"
+				placeholder="E-mail"
 				required
 				/>
+				</div>
 				<button type='submit'>Ajouter</button>
 			</form>
-		</div>
 	);
-}
+};
 
 export default AddEmployee;
