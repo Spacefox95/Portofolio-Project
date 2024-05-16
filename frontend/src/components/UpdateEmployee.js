@@ -1,26 +1,35 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function UpdateEmploye({ employee, onUpdate }) {
+function UpdateEmployee({ employee, onUpdate }) {
 	const [firstname, setFirstName] = useState(employee.firstname);
 	const [lastname, setLastName] = useState(employee.lastname);
 	const [role, setRole] = useState(employee.role);
 	const [email, setEmail] = useState(employee.email);
+	const [error, setError] = useState(null);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
+		const token = localStorage.getItem('token');
+		if (!token) {
+			setError('Pas de token trouvé, reloggez vous');
+			return;
+		}
 		axios.put(`http://localhost:5000/employees/${employee.id}`, {
 			firstname,
 			lastname,
 			role,
 			email
+		}, {
+			headers: { Authorization: `Bearer ${token}` }
 		})
 			.then(response => {
 				onUpdate();
 				alert('Les informations de l\'employé ont bien été mises à jour');
 			})
 			.catch(error => {
-				console.error('Il y a eu une erreur lors de la mise à jour de l\'employé', error);
+				setError('Il y a eu une erreur lors de la mise à jour de l\'employé')
+				console.error(error);
 			});
 	};
 	return (
@@ -56,9 +65,10 @@ function UpdateEmploye({ employee, onUpdate }) {
 				required
 				/>
 				<button type="submit">Mettre à jour</button>
+				{error && <p style={{ color: 'red' }}>{error}</p>}
 			</form>
 		</div>
 	)
 }
 
-export default UpdateEmploye;
+export default UpdateEmployee;

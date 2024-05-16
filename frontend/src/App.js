@@ -3,46 +3,44 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import './App.css';
 import EmployeeList from "./components/EmployeeList";
 import AddEmployee from "./components/AddEmployee";
-import Login from "./components/Login";
+import Login from "./pages/Login";
+import Dashboard from "./components/Dashboard";
+import Profile from "./pages/Profile";
 
 function App() {
-	const [isAuthenticated, setIsAutenticated] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		if (token) {
-			setIsAutenticated(true);
+			setIsAuthenticated(true);
 		}
 	}, []);
 
 	const handleLogin = () => {
-		setIsAutenticated(true);
+		setIsAuthenticated(true);
 	};
 
 	const handleLogout = () => {
 		localStorage.removeItem('token');
-		setIsAutenticated(false);
+		setIsAuthenticated(false);
 	};
 
 	return (
 		<Router>
-			<div>
-				<h1>Cartotrac Intranet</h1>
-				{isAuthenticated && <button onClick={handleLogout}>Déconnexion</button>}
-				<Routes>
-					<Route path="/login" element={isAuthenticated ? <Navigate to ="/" /> : <Login onLogin={handleLogin} />} />
-					<Route path="/" element={isAuthenticated ? (
-							<>
-								<AddEmployee />
-								<EmployeeList />
-							</>
-						) : (
-							<Navigate to="/login" />
-						)} />
-					</Routes>
-			</div>
+				<div>
+						<h1>Cartotrac Intranet</h1>
+						{isAuthenticated && <button onClick={handleLogout}>Déconnexion</button>}
+						<Routes>
+								<Route path="/login" element={isAuthenticated ? <Navigate to ="/" /> : <Login onLogin={handleLogin} />} />
+								<Route path="/" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} /> {/* This route is adjusted */}
+								<Route path="/profile" element={<Profile />} />
+								<Route path="/employee-list" element={<EmployeeList />} />
+								<Route path="/add-employee" element={<AddEmployee />} />
+						</Routes>
+				</div>
 		</Router >
-	);
+);
 }
 
 export default App;

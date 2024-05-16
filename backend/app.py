@@ -3,11 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+import os
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///intranet.db'
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'your_jwt_secret_key')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
@@ -32,9 +33,13 @@ def register():
     email = data['email'],
     password = hashed_password
   )
-  db.session.add(new_employee)
-  db.session.commit()
-  return jsonify({'message': 'Enregistrement réussi'}), 201
+  try:
+    db.session.add(new_employee)
+    db.session.commit()
+    return jsonify({'message': 'Enregistrement réussi'}), 201
+  except Exception as e:
+    db.session.rollback()
+    return jsonify({'error': str(e)}), 400
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -43,7 +48,7 @@ def login():
   if employee and bcrypt.check_password_hash(employee.password, data['password']):
     access_token = create_access_token(identity={'id': employee.id, 'email': employee.email})
     return jsonify(access_token=access_token)
-  return jsonify({'message': 'Accréditation non valide'}), 401
+  return jsonify({'error': 'Accréditation non valide'}), 401
 
 
 @app.route('/employees', methods=['GET'])
@@ -67,7 +72,8 @@ def add_employee():
         firstname=data['firstname'],
         lastname= data['lastname'],
         role=data['role'],
-        email=data['email']
+        email=data['email'],
+        password=data['password']
   )
     db.session.add(new_employee)
     db.session.commit()
@@ -88,6 +94,7 @@ def update_employee(id):
     employee.lastname = data.get('lastname', employee.lastname)
     employee.role = data.get('role', employee.role)
     employee.email = data.get('email', employee.email)
+    employee.password = data.get('password', employee.password)
     db.session.commit()
     return jsonify({'message': 'Les informations de l\'employé ont bien été mises à jour'})
   except Exception as e:
