@@ -1,90 +1,93 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function AddEmployee() {
-	const [firstname, setFirstName] = useState('');
-	const [lastname, setLastName] = useState('');
-	const [role, setRole] = useState('');
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
+function AddEmployee({ onAdd, onCancel }) {
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
+  const [role, setRole] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		const token = localStorage.getItem('token');
-		try {
-			const response = await axios.post('http://localhost:5000/employees', {
-				firstname, lastname, role, email, password
-			}, {
-				headers: { Authorization: `Bearer ${token}` }
-			});
-			setFirstName('');
-			setLastName('');
-			setRole('');
-			setEmail('');
-			setPassword('');
-			onAdd();
-			console.log('Employé ajouté:', response.data);
-		} catch (error) {
-			console.error('Il y a eu une erreur lors de l\'ajout d\'un employé!', error);
-		}
-	};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    try {
+      await axios.post('http://localhost:5000/users', {
+        firstname, lastname, role, email, password
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setFirstName('');
+      setLastName('');
+      setRole('');
+      setEmail('');
+      setPassword('');
+      onAdd();
+    } catch (error) {
+      setError('Il y a eu une erreur lors de l\'ajout d\'un utilisateur');
+      console.error(error);
+    }
+  };
 
-	return (
-		<form onSubmit={handleSubmit}>
-			<h1>Ajouter un employé</h1>
-			<div>
-				<label>Prénom</label>
-				<input
-					type='text'
-					value={firstname}
-					onChange={e => setFirstName(e.target.value)}
-					placeholder='Prénom'
-					required
-				/>
-			</div>
-			<div>
-				<label>Nom</label>
-				<input
-					type='text'
-					value={lastname}
-					onChange={e => setLastName(e.target.value)}
-					placeholder='Nom'
-					required
-				/>
-			</div>
-			<div>
-				<label>Rôle</label>
-				<input
-					type='text'
-					value={role}
-					onChange={e => setRole(e.target.value)}
-					placeholder='Rôle'
-					required
-				/>
-			</div>
-			<div>
-				<label>Email</label>
-				<input
-					type='text'
-					value={email}
-					onChange={e => setEmail(e.target.value)}
-					placeholder="E-mail"
-					required
-				/>
-			</div>
-			<div>
-				<label>Mot de passe</label>
-				<input
-				type='password'
-				value={password}
-				onChange={e => setPassword(e.target.value)}
-				placeholder='Mot de passe'
-				required
-				/>
-			</div>
-			<button type='submit'>Ajouter</button>
-		</form>
-	);
-};
+  return (
+    <form onSubmit={handleSubmit} className='form-container'>
+      <h2>Ajouter un employé</h2>
+      {error && <div className="error">{error}</div>}
+      <div>
+        <label for="userFirstname">Prénom</label>
+        <input
+          type='text'
+          value={firstname}
+          onChange={e => setFirstName(e.target.value)}
+          placeholder='Prénom'
+          required
+        />
+      </div>
+      <div>
+        <label for="userLastname">Nom</label>
+        <input
+          type='text'
+          value={lastname}
+          onChange={e => setLastName(e.target.value)}
+          placeholder='Nom'
+          required
+        />
+      </div>
+      <div>
+        <label for="userRole">Rôle</label>
+        <input
+          type='text'
+          value={role}
+          onChange={e => setRole(e.target.value)}
+          placeholder='Rôle'
+          required
+        />
+      </div>
+      <div>
+        <label for="userEmail">E-mail</label>
+        <input
+          type='email'
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder='E-mail'
+          required
+        />
+      </div>
+      <div>
+        <label for="userPassword">Mot de passe</label>
+        <input
+          type='password'
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          placeholder='Mot de passe'
+          required
+        />
+      </div>
+      <button type='submit' className='btn'>Ajouter un utilisateur</button>
+      <button type='button' onClick={onCancel} className='btn'>Annuler</button>
+    </form>
+  );
+}
 
 export default AddEmployee;

@@ -13,3 +13,4 @@ class Utilisateur(db.Model):
   password = Column(String(100), nullable=False)
   created_at = Column(DateTime, default=datetime.utcnow)
   updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+  

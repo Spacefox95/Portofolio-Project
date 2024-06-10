@@ -1,0 +1,59 @@
+/* Profile.css */
+
+.container {
+  display: flex;
+}
+
+.user-list-container {
+  width: 100%;
+  max-width: 300px;
+  background-color: #003366;
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-item {
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.user-item hr {
+  border: 0;
+  border-top: 1px solid #fff;
+}
+
+.form-container input {
+  color: black;
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #ec9b1a;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: #00509e;
+}
