@@ -1,3 +1,7 @@
+// tasks.jsx
+// Cette page affiche les tâches à réaliser par les utilisateurs de l'intranet
+// Les tâches sont enregistrées dans une database SQLite
+
 import React, { useState, useEffect } from 'react';
 import Index from "../components/Index";
 import '../style/tasks.css';
@@ -13,6 +17,7 @@ const TaskManager = () => {
   const [currentTaskId, setCurrentTaskId] = useState(null);
 
   useEffect(() => {
+    // Récupère les tâches
     const fetchTasks = async () => {
       try {
         const response = await axios.get('http://localhost:5000/tasks');
@@ -24,6 +29,7 @@ const TaskManager = () => {
     fetchTasks();
   }, []);
 
+  // Modifie la tâche associée
   const handleAddOrEditTask = async () => {
     if (title && startDate && endDate && description) {
       const taskData = {
@@ -55,6 +61,7 @@ const TaskManager = () => {
     }
   };
 
+  // Enregistre les modifications
   const handleEditTask = (task) => {
     setTitle(task.title);
     setStartDate(task.start_date);
@@ -64,6 +71,7 @@ const TaskManager = () => {
     setCurrentTaskId(task.id);
   };
 
+  // Supprime la tâche
   const handleDeleteTask = async (taskId) => {
     try {
       await axios.delete(`http://localhost:5000/tasks/${taskId}`);
@@ -141,9 +149,6 @@ const TaskManager = () => {
           </div>
         </div>
       </div>
-      <footer>
-        <p>Mentions légales</p>
-      </footer>
     </div>
   );
 };

@@ -1,3 +1,7 @@
+// Login.jsx
+// Page de connexion
+// Cette page contient une identification par adresse mail et le mot de passe associé
+
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
@@ -9,12 +13,14 @@ const Login = ({ onLogin }) => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    // Affiche le formulaire d'enregistrement
+    // Si les logs sont valides, redirige vers le dashboard. Sinon, reste sur la page et affiche le message d'erreur
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:5000/login', 
                 { email, password },
-                { headers: { 'Content-Type': 'application/json' } } // Ensure the Content-Type header is set
+                { headers: { 'Content-Type': 'application/json' } }
             );
             localStorage.setItem('token', response.data.access_token);
             onLogin();

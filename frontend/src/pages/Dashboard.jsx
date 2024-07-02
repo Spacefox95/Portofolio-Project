@@ -1,3 +1,18 @@
+// Page principale de l'intranet. Cette page comprend :
+// - une barre de navigation vers :
+//      - la liste des utilisateurs
+//      - le profil de l'utilisateur
+//      - un lien vers la messagerie discord
+//      - un lien vers le calendrier
+//      - les documents sauvegardés
+//      - les tâches en cours
+// - divers composants :
+//      - routes API vers les tâches en cours
+//      - route API vers le serveur discord
+//      - routes API vers les événements du calendrier
+//      - routes API vers les documents sauvegardés
+
+
 import React, { useState, useEffect } from 'react';
 import Index from '../components/Index';
 import UpcomingEvents from '../components/UpcomingEvents';
@@ -25,6 +40,7 @@ const Dashboard = () => {
         fetchTasks();
     }, []);
 
+    // Récupère les documents sauvegardés
     const fetchFiles = async () => {
         try {
             const response = await axios.get('http://localhost:5000/upload');
@@ -34,10 +50,12 @@ const Dashboard = () => {
         }
     };
 
+    // Sélectionne le document
     const handleFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
 
+    // Enregistre les informations
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData();
@@ -58,6 +76,7 @@ const Dashboard = () => {
         }
     };
 
+    // Supprime le document
     const deleteDoc = async (fileId) => {
         try {
             const response = await axios.delete(`http://localhost:5000/upload/${fileId}`);
@@ -72,6 +91,7 @@ const Dashboard = () => {
         }
     };
 
+    // Enregistre un document
     const downloadDoc = async (fileId, filename) => {
         try {
             const response = await axios.get(`http://localhost:5000/upload/${fileId}`, {
@@ -89,6 +109,7 @@ const Dashboard = () => {
         }
     };
 
+    // Récupère les tâches en cours
     const fetchTasks = async () => {
         try {
             const response = await axios.get('http://localhost:5000/tasks');
@@ -98,6 +119,7 @@ const Dashboard = () => {
         }
     };
 
+    // Modifie un tâche
     const handleAddOrEditTask = async () => {
         if (title && startDate && endDate && description) {
             const taskData = {
@@ -129,6 +151,7 @@ const Dashboard = () => {
         }
     };
 
+    // Enregistre les modifications d'une tâche
     const handleEditTask = (task) => {
         setTitle(task.title);
         setStartDate(task.start_date);
@@ -138,6 +161,7 @@ const Dashboard = () => {
         setCurrentTaskId(task.id);
     };
 
+    // Supprime une tâche
     const handleDeleteTask = async (taskId) => {
         try {
             await axios.delete(`http://localhost:5000/tasks/${taskId}`);
@@ -147,6 +171,7 @@ const Dashboard = () => {
         }
     };
 
+    // Annule le formulaire d'édition de tâche
     const handleCancelEdit = () => {
         setIsEditing(false);
         setTitle('');

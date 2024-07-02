@@ -1,4 +1,6 @@
 // UploadDoc.jsx
+// Page qui intègre le composant de gestion de l'import de documents PDF
+
 import React from "react";
 import Index from "../components/Index";
 import UploadDocuments from "../components/UploadDocuments";

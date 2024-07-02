@@ -1,14 +1,13 @@
+// Profile.jsx
+// PAge pour afficher les information de l'utilisateur
 import axios from 'axios';
-
-// Set default base URL and headers
-axios.defaults.baseURL = 'http://localhost:5000';
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-
-// Profile component
 import React, { useState, useEffect } from "react";
 import Index from "../components/Index";
 import '../style/footer.css';
 import '../style/Profile.css';
+
+axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -34,10 +33,12 @@ const Profile = () => {
         fetchUser();
     }, []);
 
+    // Autorise la modification des informations
     const handleEdit = () => {
         setEditMode(true);
     };
 
+    // Variable pour récupérer les données et les sauvegarder
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -46,19 +47,18 @@ const Profile = () => {
                 lastname,
                 email
             });
-            // Refresh user data after update
             const response = await axios.get('/profile');
             setUser(response.data);
-            setEditMode(false); // Exit edit mode
-            setError(null); // Clear any previous errors
+            setEditMode(false);
+            setError(null);
         } catch (error) {
             setError('Erreur lors de la mise à jour du profil');
             console.error('Erreur lors de la mise à jour du profil', error);
         }
     };
 
+    // Annule les modifications
     const handleCancel = () => {
-        // Reset form fields to current user data
         setFirstname(user.firstname);
         setLastname(user.lastname);
         setEmail(user.email);
@@ -124,9 +124,6 @@ const Profile = () => {
                     )}
                 </div>
             </div>
-            <footer>
-                <p>Mentions légales</p>
-            </footer>
         </div>
     );
 };

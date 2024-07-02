@@ -1,3 +1,8 @@
+// UsersList.jsx
+// Cette page affiche la liste des utilisateurs
+// Elle comprend également des boutons pour modifier, ajouter ou supprimer des utilisateurs
+// Cette page intéragit différement en fonction du rôle de l'utilisateur
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +20,7 @@ const UsersList = () => {
   const addFormRef = useRef(null);
   const updateFormRef = useRef(null);
 
-  // Fetch the current user's role
+  // Récupère le rôle de l'utilisateur
   const fetchUserRole = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -27,7 +32,7 @@ const UsersList = () => {
       const response = await axios.get('http://localhost:5000/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setUserRole(response.data.role); // Assumes the response contains the role of the current user
+      setUserRole(response.data.role);
     } catch (error) {
       console.error('Error fetching user role:', error);
       if (error.response && error.response.status === 401) {
@@ -36,7 +41,7 @@ const UsersList = () => {
     }
   };
 
-  // Fetch the list of users
+  // Récupère la liste des utilisateurs
   const fetchUsers = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -58,10 +63,11 @@ const UsersList = () => {
   };
 
   useEffect(() => {
-    fetchUserRole(); // Fetch the role of the current user
-    fetchUsers(); // Fetch the list of users
+    fetchUserRole();
+    fetchUsers();
   }, []);
 
+  // Supprimer l'utilisateur associé à l'id
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token');
@@ -75,9 +81,10 @@ const UsersList = () => {
     }
   };
 
+  // Met à jour les informations de l'utilisateur
   const handleUpdate = () => {
-    fetchUsers(); // Fetch the updated user list
-    setSelectedUser(null); // Clear selectedUser to close the update form
+    fetchUsers();
+    setSelectedUser(null);
   };
 
   const handleAuthError = (error) => {
@@ -86,22 +93,26 @@ const UsersList = () => {
     }
   };
 
+  // Permet la modification des données d'un utilisateur
+  // Ajout d'un scroll vers le formulaire mais ne fonctionne pas pour l'instant
   const handleEditUser = (user) => {
-    setSelectedUser(user); // Set the selected user for editing
+    setSelectedUser(user);
     setTimeout(() => {
       if (updateFormRef.current) {
         updateFormRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 0); // Ensure the form is visible before scrolling
+    }, 0);
   };
 
+  // Formulaire pour ajouter un utilisateur
+  // Ajout d'un scroll vers le formulaire quand il s'affiche
   const handleAddUserClick = () => {
     setShowAddForm(true);
     setTimeout(() => {
       if (addFormRef.current) {
         addFormRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 0); // Ensure the form is visible before scrolling
+    }, 0);
   };
 
   return (
@@ -130,10 +141,10 @@ const UsersList = () => {
             </ul>
             {selectedUser && (
               <UpdateEmployee
-                key={selectedUser.id} // Add key prop to force re-render on user change
+                key={selectedUser.id}
                 user={selectedUser}
                 onUpdate={handleUpdate}
-                ref={updateFormRef} // Ref added here
+                ref={updateFormRef}
               />
             )}
             {userRole === 'superuser' && (

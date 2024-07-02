@@ -1,4 +1,14 @@
 // Index.jsx
+// Page type de l'intranet. Cette page comprend :
+// - une barre de navigation vers :
+//      - la liste des utilisateurs
+//      - le profil de l'utilisateur
+//      - un lien vers la messagerie discord
+//      - un lien vers le calendrier
+//      - les documents sauvegardés
+//      - les tâches en cours
+// - la mise en page type de chaque page via le CSS
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -21,7 +31,7 @@ const Index = ({ children }) => {
     };
 
     const handleViewMessage = () => {
-        window.open('https://discord.gg/3K3qSbtm', '_blank');
+        window.open('https://discord.gg/fuaTgPyt', '_blank');
     };
 
     const handleViewCalendar = () => {
