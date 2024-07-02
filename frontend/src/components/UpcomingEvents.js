@@ -11,8 +11,15 @@ function UpcomingEvents() {
         const response = await axios.get('http://localhost:5000/events', {
           withCredentials: true // Ensure cookies are sent with the request
         });
-        setEvents(response.data);
+        console.log('API response:', response.data);
+
+        if (Array.isArray(response.data)) {
+          setEvents(response.data);
+        } else {
+          throw new Error('Unexpected response format');
+        }
       } catch (error) {
+        console.error('Error fetching events:', error);
         setError(error);
       }
     };
@@ -31,7 +38,7 @@ function UpcomingEvents() {
           <li key={event.id}>
             <a href={event.htmlLink} target="_blank" rel="noopener noreferrer">
               {event.summary}
-            </a> - {new Date(event.start.dateTime).toLocaleString()}
+            </a> - {new Date(event.start.dateTime || event.start.date).toLocaleString()}
           </li>
         ))}
       </ul>

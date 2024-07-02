@@ -4,7 +4,7 @@ import axios from 'axios';
 function AddEmployee({ onAdd, onCancel }) {
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState('superuser');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -20,7 +20,7 @@ function AddEmployee({ onAdd, onCancel }) {
       });
       setFirstName('');
       setLastName('');
-      setRole('');
+      setRole('superuser');
       setEmail('');
       setPassword('');
       onAdd();
@@ -35,7 +35,7 @@ function AddEmployee({ onAdd, onCancel }) {
       <h2>Ajouter un employé</h2>
       {error && <div className="error">{error}</div>}
       <div>
-        <label for="userFirstname">Prénom</label>
+        <label htmlFor="userFirstname">Prénom</label>
         <input
           type='text'
           value={firstname}
@@ -45,7 +45,7 @@ function AddEmployee({ onAdd, onCancel }) {
         />
       </div>
       <div>
-        <label for="userLastname">Nom</label>
+        <label htmlFor="userLastname">Nom</label>
         <input
           type='text'
           value={lastname}
@@ -55,17 +55,19 @@ function AddEmployee({ onAdd, onCancel }) {
         />
       </div>
       <div>
-        <label for="userRole">Rôle</label>
-        <input
-          type='text'
+        <label htmlFor="userRole">Rôle</label>
+        <select
           value={role}
           onChange={e => setRole(e.target.value)}
-          placeholder='Rôle'
           required
-        />
+        >
+          <option value="superuser">Administrateur</option>
+          <option value="collaborateur">Collaborateur</option>
+          <option value="invite">Invité</option>
+        </select>
       </div>
       <div>
-        <label for="userEmail">E-mail</label>
+        <label htmlFor="userEmail">E-mail</label>
         <input
           type='email'
           value={email}
@@ -75,7 +77,7 @@ function AddEmployee({ onAdd, onCancel }) {
         />
       </div>
       <div>
-        <label for="userPassword">Mot de passe</label>
+        <label htmlFor="userPassword">Mot de passe</label>
         <input
           type='password'
           value={password}
