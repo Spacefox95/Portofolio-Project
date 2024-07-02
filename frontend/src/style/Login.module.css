@@ -39,7 +39,6 @@
 	flex-grow: 1;
 	padding-top: 80px;
 	padding-bottom: 50px;
-	box-sizing: border-box;
 	height: calc(100vh - 130px);
 	overflow: auto;
 }
@@ -50,19 +49,18 @@
 	padding: 20px;
 	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	width: 100%;
-	max-width: 300px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	box-sizing: border-box;
+	height: 400px;
 }
 
 .formContainer input {
 	color: black;
-  width: 100%;
+	width: 300px;
   padding: 10px;
-  margin: 15px 0;
+  margin: 20px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
@@ -83,7 +81,7 @@
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	margin-top: 10px;
+	margin-top: 20px;
 	margin-bottom: 20px;
 }
 
@@ -94,4 +92,8 @@
 label {
 	margin: 15px;
 	border-radius: 5px;
+}
+
+.form {
+	display: flex;
 }

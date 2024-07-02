@@ -22,6 +22,7 @@
 .user-item {
   padding: 10px;
   margin-bottom: 5px;
+  color: white;
 }
 
 .user-item hr {
@@ -29,11 +30,11 @@
   border-top: 1px solid #fff;
 }
 
-.form-container input {
-  color: black;
+.form-container input,
+.form-container select {
   width: 100%;
   padding: 10px;
-  margin: 15px 0;
+  margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
@@ -56,4 +57,8 @@
 
 .btn:hover {
   background-color: #00509e;
+}
+
+.add-user-container {
+  scroll-behavior: auto;
 }

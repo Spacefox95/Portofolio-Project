@@ -1,17 +1,14 @@
-/* header.css */
-
 .header {
+    display: flex;
     position: fixed;
     background-color: #003366;
     height: 80px;
     width: 100%;
     top: 0;
-    display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     z-index: 1;
-    box-sizing: border-box;
 }
 
 .header h1 {
@@ -31,5 +28,5 @@
 }
 
 .logout-icon {
-    margin-right: 15px;
+    margin-right: 55px;
 }
