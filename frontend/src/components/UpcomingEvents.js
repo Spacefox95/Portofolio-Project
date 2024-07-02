@@ -1,3 +1,6 @@
+// UpcomingEvents.js
+// Récupère les événements de l'API de google Calendar
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 

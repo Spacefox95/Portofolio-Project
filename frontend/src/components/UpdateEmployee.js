@@ -1,3 +1,6 @@
+// UpdateEmployee.js
+// Modifie les informations d'utilisateur
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
@@ -18,6 +21,8 @@ function UpdateEmployee({ user, onUpdate }) {
     setError(null);
   }, [user]);
 
+  // Affiche le formulaire avec les informations associées à l'utilisateur choisi
+  // et enregistre les modifications
   const handleSubmit = async (event) => {
     event.preventDefault();
     const token = localStorage.getItem('token');

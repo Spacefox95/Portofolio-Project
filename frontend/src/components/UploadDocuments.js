@@ -1,3 +1,6 @@
+// UploadDocuments.js
+// Sauvegarde des documents PDF dans une database Mongod
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from '../style/UploadDoc.module.css';
@@ -25,10 +28,12 @@ const UploadDocuments = () => {
     }
   };
 
+  // Sélectionne le fichier dans la database
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
+  // Variable d'attente d'intégration de documents
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
@@ -49,6 +54,7 @@ const UploadDocuments = () => {
     }
   };
 
+  // Supprime le fichier sélectionné de la database
   const deleteDoc = async (fileId) => {
     try {
       const response = await axios.delete(`http://localhost:5000/upload/${fileId}`);
@@ -63,6 +69,7 @@ const UploadDocuments = () => {
     }
   };
 
+  // Enregistre un dossier dans la database
   const downloadDoc = async (fileId, filename) => {
     try {
       const response = await axios.get(`http://localhost:5000/upload/${fileId}`, {

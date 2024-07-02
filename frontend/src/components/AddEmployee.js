@@ -1,3 +1,12 @@
+// AddEmployee.js
+// Composant pour ajouter des utilisateurs
+// L'ajout des utilisateurs comprend divers champs à remplir :
+//    - un prénom
+//    - un nom
+//    - un email
+//    - un rôle qui contrôle les differents accès à l'intranet
+//    - un mot de passe
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
