@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from api import bcrypt, db
 from models.User import Utilisateur, SuperUser, Invite, Collaborateur
 from decorators import roles_required
@@ -42,7 +43,8 @@ def register():
     try:
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({'message': 'Enregistrement réussi'}), 201
+        access_token = create_access_token(identity={'email': new_user.email})
+        return jsonify({'message': 'Enregistrement réussi', 'token': access_token}), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400

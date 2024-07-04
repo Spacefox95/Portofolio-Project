@@ -15,9 +15,6 @@ mongo_client = MongoClient('mongodb://localhost:27017/')
 # Initialize Bcrypt for password hashing
 bcrypt = Bcrypt()
 
-# Initialize JWT for handling JSON Web Tokens
-jwt = JWTManager()
-
 # Create a function to create the Flask application
 def create_app():
     app = Flask(__name__)
@@ -31,6 +28,8 @@ def create_app():
     
     # Set the JWT token expiration time
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=12)  # Set to 12 hours or any other duration you prefer
+    # Initialize JWT for handling JSON Web Tokens
+    jwt = JWTManager(app)
 
     # Initialize Flask-Session
     Session(app)

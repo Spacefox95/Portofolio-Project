@@ -70,9 +70,9 @@ def update_user(id):
 @users_routes.route('/users/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(id):
-    employee = Utilisateur.query.get(id)
-    if employee is None:
+    user = Utilisateur.query.get(id)
+    if user is None:
         return jsonify({'error': 'L\'utilisateur n\'a pas été trouvé'}), 404
-    db.session.delete(employee)
+    db.session.delete(user)
     db.session.commit()
     return jsonify({'message': 'L\'utilisateur a bien été supprimé'})
