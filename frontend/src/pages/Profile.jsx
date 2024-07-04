@@ -1,5 +1,3 @@
-// Profile.jsx
-// PAge pour afficher les information de l'utilisateur
 import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import Index from "../components/Index";
@@ -7,7 +5,6 @@ import '../style/footer.css';
 import '../style/Profile.css';
 
 axios.defaults.baseURL = 'http://localhost:5000';
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -19,45 +16,59 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
+            const token = localStorage.getItem('token');
             try {
-                const response = await axios.get('/profile');
+                console.log('Sending GET request to /profile');
+                const response = await axios.get('http://localhost:5000/profile', {
+                    headers: { Authorization: `Bearer ${token}` }
+                  });
+                console.log('Received response:', response);
                 setUser(response.data);
                 setFirstname(response.data.firstname);
                 setLastname(response.data.lastname);
                 setEmail(response.data.email);
+                setError(null); // Clear any previous errors on successful fetch
             } catch (error) {
-                console.error('Erreur lors de la récupération des données utilisateur', error);
+                console.error('Erreur lors de la récupération des données utilisateur:', error);
+                setError('Erreur lors de la récupération des données utilisateur');
             }
         };
 
         fetchUser();
     }, []);
 
-    // Autorise la modification des informations
     const handleEdit = () => {
         setEditMode(true);
     };
 
-    // Variable pour récupérer les données et les sauvegarder
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem('token');
+
         try {
-            await axios.put('/profile', {
+            console.log('Sending PUT request to /profile');
+            await axios.put('http://localhost:5000/profile', {
                 firstname,
                 lastname,
                 email
-            });
-            const response = await axios.get('/profile');
+            },
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+        );
+            console.log('PUT request successful');
+            const response = await axios.get('http://localhost:5000/profile', {
+                headers: { Authorization: `Bearer ${token}` }
+            });            
             setUser(response.data);
             setEditMode(false);
-            setError(null);
+            setError(null); // Clear any previous errors on successful update
         } catch (error) {
+            console.error('Erreur lors de la mise à jour du profil:', error);
             setError('Erreur lors de la mise à jour du profil');
-            console.error('Erreur lors de la mise à jour du profil', error);
         }
     };
 
-    // Annule les modifications
     const handleCancel = () => {
         setFirstname(user.firstname);
         setLastname(user.lastname);

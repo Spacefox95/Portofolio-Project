@@ -11,12 +11,12 @@ const Login = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Affiche le formulaire d'enregistrement
-    // Si les logs sont valides, redirige vers le dashboard. Sinon, reste sur la page et affiche le message d'erreur
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await axios.post('http://localhost:5000/login', 
                 { email, password },
@@ -32,7 +32,14 @@ const Login = ({ onLogin }) => {
             } else {
                 setError('Une erreur est survenue. Veuillez réessayer.');
             }
+        } finally {
+            setIsLoading(false);
         }
+    };
+
+    const handleInputChange = (setter) => (e) => {
+        setter(e.target.value);
+        if (error) setError('');
     };
 
     return (
@@ -50,7 +57,7 @@ const Login = ({ onLogin }) => {
                             <input
                                 type="email"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={handleInputChange(setEmail)}
                                 required
                             />
                         </div>
@@ -59,11 +66,13 @@ const Login = ({ onLogin }) => {
                             <input
                                 type="password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={handleInputChange(setPassword)}
                                 required
                             />
                         </div>
-                        <button type="submit">Se connecter</button>
+                        <button type="submit" disabled={isLoading}>
+                            {isLoading ? 'Connexion en cours...' : 'Se connecter'}
+                        </button>
                     </form>
                 </div>
             </div>
